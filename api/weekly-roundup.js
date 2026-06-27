@@ -190,7 +190,7 @@ export default async function handler(req, res) {
         best: u.best,
         count: u.count,
       }))
-      .sort((a, b) => b.avg - a.avg);
+      .sort((a, b) => b.best - a.best);
 
     const top10 = fullRanked.slice(0, 10);
 
