@@ -83,7 +83,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
         </td></tr>
         <tr><td style="padding:0 40px 20px;text-align:center;">
           <h2 style="font-family:'Jost',sans-serif;font-size:18px;font-weight:700;color:#ffffff;margin:0 0 6px 0;">This week's roundup</h2>
-          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked.</p>
+          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked...</p>
         </td></tr>
 
         ${bestWordThisWeek ? `
