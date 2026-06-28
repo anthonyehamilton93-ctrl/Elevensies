@@ -22,7 +22,7 @@ async function db(path) {
 }
 
 // ── Email builder ────────────────────────────────────────────────────────────
-function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank, newBadges, totalUsers }) {
+function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank, newBadges, totalUsers, userId }) {
 
   // Personal scores section
   const scoresHTML = weekScores.length > 0
@@ -83,7 +83,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
         </td></tr>
         <tr><td style="padding:0 40px 20px;text-align:center;">
           <h2 style="font-family:'Jost',sans-serif;font-size:18px;font-weight:700;color:#ffffff;margin:0 0 6px 0;">This week's roundup</h2>
-          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked...</p>
+          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked.</p>
         </td></tr>
 
         ${bestWordThisWeek ? `
@@ -138,7 +138,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
 
         <!-- Footer -->
         <tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
-          <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this as a registered Elevensies player. Reply to unsubscribe.</p>
+          <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this as a registered Elevensies player. <a href='https://playelevensies.com/api/unsubscribe?uid=${userId}' style='color:#8ba895;'>Unsubscribe</a></p>
         </td></tr>
 
       </table>
@@ -161,7 +161,7 @@ export default async function handler(req, res) {
     const weekResults = allResults.filter(r => r.played_at > oneWeekAgo);
 
     // Fetch all profiles (names + badges)
-    const profiles = await db('/profiles?select=id,display_name,badges');
+    const profiles = await db('/profiles?select=id,display_name,badges,email_unsubscribed');
     const profileMap = {};
     profiles.forEach(p => { profileMap[p.id] = p; });
 
@@ -206,8 +206,10 @@ export default async function handler(req, res) {
     // In practice: just show their full badge list if they have any
     // (A more precise implementation would require a badge_earned_at column)
 
-    // Send one personalised email per user
-    const emails = confirmedUsers.map(user => {
+    // Send one personalised email per user — skip unsubscribed
+    const emails = confirmedUsers
+      .filter(user => !profileMap[user.id]?.email_unsubscribed)
+      .map(user => {
       const profile = profileMap[user.id];
       const name = profile?.display_name || null;
 
@@ -249,6 +251,7 @@ export default async function handler(req, res) {
           userRank,
           newBadges,
           totalUsers: fullRanked.length,
+          userId: user.id,
         }),
       };
     });
