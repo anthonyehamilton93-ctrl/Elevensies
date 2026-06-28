@@ -32,7 +32,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
           <td style="padding:6px 12px;font-family:'Jost',sans-serif;font-size:13px;color:#f0c020;font-weight:700;text-align:right;">${s.total_score}</td>
           <td style="padding:6px 12px;font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;text-align:right;">${s.best_word || '—'}</td>
         </tr>`).join('')
-    : `<tr><td colspan="3" style="padding:12px;text-align:center;color:#8ba895;font-size:13px;font-family:'Jost',sans-serif;">No games </td></tr>`;
+    : `<tr><td colspan="3" style="padding:12px;text-align:center;color:#8ba895;font-size:13px;font-family:'Jost',sans-serif;">No games this week</td></tr>`;
 
   // Leaderboard section
   const lbHTML = leaderboard.map((row, i) => {
@@ -67,7 +67,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Week in Elevensies</title>
+  <title>This Week in Elevensies</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700;800&display=swap" rel="stylesheet">
@@ -83,11 +83,11 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
         </td></tr>
         <tr><td style="padding:0 40px 20px;text-align:center;">
           <h2 style="font-family:'Jost',sans-serif;font-size:18px;font-weight:700;color:#ffffff;margin:0 0 6px 0;">This week's roundup</h2>
-          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked...</p>
+          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked.</p>
         </td></tr>
 
         ${bestWordThisWeek ? `
-        <!-- Your word of the week -->
+        <!-- Best word of the week -->
         ${divider('YOUR WORD OF THE WEEK')}
         <tr><td style="padding:8px 40px 20px;text-align:center;">
           <p style="font-family:'Jost',sans-serif;font-size:28px;font-weight:900;color:#f0c020;margin:0 0 4px 0;letter-spacing:0.05em;">${bestWordThisWeek.word.toUpperCase()}</p>
@@ -242,7 +242,7 @@ export default async function handler(req, res) {
       return {
         from: FROM_EMAIL,
         to: user.email,
-        subject: 'Your Week in Elevensies 🟨',
+        subject: 'This week in Elevensies',
         html: buildEmail({
           name,
           weekScores: myWeekScores,
