@@ -183,7 +183,7 @@ export default async function handler(req, res) {
       </td></tr>
 
       ${bestWordThisWeek ? `
-      ${divider('BEST WORD THIS WEEK')}
+      ${divider('YOUR WORD OF THE WEEK')}
       <tr><td style="padding:8px 40px 20px;text-align:center;">
         <p style="font-family:'Jost',sans-serif;font-size:28px;font-weight:900;color:#f0c020;margin:0 0 4px 0;letter-spacing:0.05em;">${bestWordThisWeek.word.toUpperCase()}</p>
         <p style="font-family:'Jost',sans-serif;font-size:12px;color:#e2e8f0;margin:0;opacity:0.7;">${bestWordThisWeek.score} pts · played by ${bestWordThisWeek.playerName}</p>
