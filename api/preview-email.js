@@ -57,6 +57,36 @@ const divider = (label) => `<tr><td colspan="10" style="padding:20px 40px 8px;">
 export default async function handler(req, res) {
   const type = req.query.type || 'weekly';
 
+  if (type === 'reminder') {
+    const streak = parseInt(req.query.streak || '3');
+    const name = req.query.name || 'there';
+    const streakLine = streak >= 2
+      ? `You're on a <strong style="color:#f0c020;">${streak}-day streak</strong> — don't break it now.`
+      : `Today's your chance to start a streak.`;
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(wrap(`
+      ${header}
+      <tr><td style="padding:0 40px;text-align:center;">
+        <h2 style="font-family:'Jost',sans-serif;font-size:22px;font-weight:700;color:#ffffff;margin:0 0 12px 0;">Time for Elevensies!</h2>
+        <p style="font-family:'Jost',sans-serif;font-size:15px;line-height:22px;color:#e2e8f0;margin:0 0 12px 0;">
+          Hey ${name}, today's game is open right now. You've got one hour.
+        </p>
+        <p style="font-family:'Jost',sans-serif;font-size:15px;line-height:22px;color:#e2e8f0;margin:0 0 28px 0;">
+          ${streakLine}
+        </p>
+      </td></tr>
+      <tr><td align="center" style="padding:0 40px 44px 40px;">
+        <a href="${GAME_URL}" style="display:inline-block;background-color:#f0c020;color:#155c33;font-family:'Jost',sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:8px;letter-spacing:0.02em;text-transform:uppercase;">Play Now</a>
+      </td></tr>
+      <tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
+        <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">
+          You're getting this because you played yesterday.
+          <a href="${GAME_URL}/api/unsubscribe?uid=preview" style="color:#8ba895;">Unsubscribe</a>
+        </p>
+      </td></tr>
+    `));
+  }
+
   if (type === 'welcome') {
     res.setHeader('Content-Type', 'text/html');
     return res.status(200).send(wrap(`
