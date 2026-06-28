@@ -69,7 +69,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: user.email,
-        subject: 'Welcome to Elevensies',
+        subject: 'Welcome to Elevensies 🟨',
         html: welcomeHTML(record.display_name),
       }),
     });
