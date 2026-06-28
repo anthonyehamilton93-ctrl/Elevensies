@@ -7,7 +7,7 @@ const GAME_URL = 'https://playelevensies.com';
 
 const BADGE_NAMES = {
   streak: 'STREAK', wordsmith: 'WORDSMITH', avid: 'AVID',
-  doubledown: 'DOUBLE DOWN', spotter: 'SPOTTER', purist: 'PURIST',
+  doubledown: 'DOUBLES', spotter: 'SPOTTER', purist: 'PURIST',
   linguist: 'LINGUIST', centurion: 'CENTURION'
 };
 
