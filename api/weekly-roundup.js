@@ -32,7 +32,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
           <td style="padding:6px 12px;font-family:'Jost',sans-serif;font-size:13px;color:#f0c020;font-weight:700;text-align:right;">${s.total_score}</td>
           <td style="padding:6px 12px;font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;text-align:right;">${s.best_word || '—'}</td>
         </tr>`).join('')
-    : `<tr><td colspan="3" style="padding:12px;text-align:center;color:#8ba895;font-size:13px;font-family:'Jost',sans-serif;">No games this week</td></tr>`;
+    : `<tr><td colspan="3" style="padding:12px;text-align:center;color:#8ba895;font-size:13px;font-family:'Jost',sans-serif;">No games </td></tr>`;
 
   // Leaderboard section
   const lbHTML = leaderboard.map((row, i) => {
@@ -67,7 +67,7 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>This Week in Elevensies</title>
+  <title>Your Week in Elevensies</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700;800&display=swap" rel="stylesheet">
@@ -242,7 +242,7 @@ export default async function handler(req, res) {
       return {
         from: FROM_EMAIL,
         to: user.email,
-        subject: 'This week in Elevensies',
+        subject: 'Your Week in Elevensies',
         html: buildEmail({
           name,
           weekScores: myWeekScores,
