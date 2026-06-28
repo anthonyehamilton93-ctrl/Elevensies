@@ -83,11 +83,11 @@ function buildEmail({ name, weekScores, bestWordThisWeek, leaderboard, userRank,
         </td></tr>
         <tr><td style="padding:0 40px 20px;text-align:center;">
           <h2 style="font-family:'Jost',sans-serif;font-size:18px;font-weight:700;color:#ffffff;margin:0 0 6px 0;">This week's roundup</h2>
-          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked.</p>
+          <p style="font-family:'Jost',sans-serif;font-size:13px;color:#e2e8f0;margin:0;opacity:0.8;">${greeting} here's how your week looked...</p>
         </td></tr>
 
         ${bestWordThisWeek ? `
-        <!-- Best word of the week -->
+        <!-- Your word of the week -->
         ${divider('YOUR WORD OF THE WEEK')}
         <tr><td style="padding:8px 40px 20px;text-align:center;">
           <p style="font-family:'Jost',sans-serif;font-size:28px;font-weight:900;color:#f0c020;margin:0 0 4px 0;letter-spacing:0.05em;">${bestWordThisWeek.word.toUpperCase()}</p>
@@ -242,7 +242,7 @@ export default async function handler(req, res) {
       return {
         from: FROM_EMAIL,
         to: user.email,
-        subject: 'Your Week in Elevensies',
+        subject: 'Your Week in Elevensies 🟨',
         html: buildEmail({
           name,
           weekScores: myWeekScores,
