@@ -43,7 +43,7 @@ const header = `<tr><td align="center" style="padding:44px 40px 16px 40px;">
 </td></tr>`;
 
 const footer = `<tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
-  <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this as a registered Elevensies player. Reply to unsubscribe.</p>
+  <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this as a registered Elevensies player. <a href='https://playelevensies.com/api/unsubscribe?uid=preview' style='color:#8ba895;'>Unsubscribe</a></p>
 </td></tr>`;
 
 const cta = `<tr><td align="center" style="padding:0 40px 44px 40px;">
