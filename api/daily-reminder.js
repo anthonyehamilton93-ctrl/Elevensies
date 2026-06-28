@@ -118,15 +118,29 @@ export default async function handler(req, res) {
     const dayBefore = new Date(yesterday);
     dayBefore.setUTCDate(dayBefore.getUTCDate() - 1);
 
-    // Find players who played yesterday with this UTC offset
-    const recentGames = await db(
-      `/game_results?select=user_id,played_at,utc_offset&game_status=eq.completed` +
-      `&utc_offset=eq.${targetOffset}` +
-      `&played_at=gte.${dayBefore.toISOString()}` +
-      `&played_at=lt.${now.toISOString()}`
-    );
+    // Find players who played yesterday with this UTC offset OR with NULL offset
+    // For NULL offset games, infer timezone from played_at time —
+    // if they played between 10:00-12:00 UTC yesterday, assume they're near UTC/BST
+    const [recentGames, nullOffsetGames] = await Promise.all([
+      // Players with known offset matching today's target
+      db(
+        `/game_results?select=user_id,played_at,utc_offset&game_status=eq.completed` +
+        `&utc_offset=eq.${targetOffset}` +
+        `&played_at=gte.${dayBefore.toISOString()}` +
+        `&played_at=lt.${now.toISOString()}`
+      ),
+      // Players with NULL offset — include them at UTC+1 hour (10:00 UTC) only
+      targetOffset === 60 ? db(
+        `/game_results?select=user_id,played_at,utc_offset&game_status=eq.completed` +
+        `&utc_offset=is.null` +
+        `&played_at=gte.${dayBefore.toISOString()}` +
+        `&played_at=lt.${now.toISOString()}`
+      ) : Promise.resolve([])
+    ]);
 
-    if (!recentGames || recentGames.length === 0) {
+    const allRecentGames = [...(recentGames || []), ...(nullOffsetGames || [])];
+
+    if (allRecentGames.length === 0) {
       return res.status(200).json({ message: `No players at offset ${targetOffset} played yesterday` });
     }
 
@@ -135,7 +149,7 @@ export default async function handler(req, res) {
     todayStart.setUTCHours(0, 0, 0, 0);
 
     const playedYesterdayIds = [...new Set(
-      recentGames
+      allRecentGames
         .filter(g => new Date(g.played_at) < todayStart)
         .map(g => g.user_id)
     )];
@@ -183,7 +197,7 @@ export default async function handler(req, res) {
         return {
           from: FROM_EMAIL,
           to: emailMap[uid],
-          subject: "Time for Elevensies! 🟨",
+          subject: "Time for Elevensies! 🟡",
           html,
         };
       });
