@@ -9,7 +9,7 @@ const FROM_EMAIL = 'Elevensies <noreply@playelevensies.com>';
 const GAME_URL = 'https://playelevensies.com';
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-function welcomeHTML(displayName) {
+function welcomeHTML(displayName, userId) {
   const name = displayName && !displayName.startsWith('user') ? displayName : 'there';
   return `<!DOCTYPE html>
 <html lang="en">
@@ -34,11 +34,14 @@ function welcomeHTML(displayName) {
             Your account is set up and your stats are ready to track. The game opens every day at 11am — 10 tiles, 11 turns, one shot at the leaderboard. Your score counts even if you don't finish, so make every word count.
           </p>
         </td></tr>
-        <tr><td align="center" style="padding:0 40px 44px 40px;">
+        <tr><td align="center" style="padding:0 40px 28px 40px;">
           <a href="${GAME_URL}" style="display:inline-block;background-color:#f0c020;color:#155c33;font-family:'Jost',sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:8px;letter-spacing:0.02em;text-transform:uppercase;">Play Elevensies</a>
         </td></tr>
+        <tr><td align="center" style="padding:0 40px 44px 40px;">
+          <a href="${GAME_URL}/api/subscribe?uid=${userId}" style="display:inline-block;border:2px solid rgba(240,192,32,0.5);color:#f0c020;font-family:'Jost',sans-serif;font-size:13px;font-weight:700;text-decoration:none;padding:10px 24px;border-radius:8px;letter-spacing:0.08em;text-transform:uppercase;">🔔 Remind me at 11am</a>
+        </td></tr>
         <tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
-          <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this because you just created an Elevensies account.</p>
+          <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this because you just created an Elevensies account. Check your junk folder for future emails!</p>
         </td></tr>
       </table>
     </td></tr>
@@ -69,8 +72,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: user.email,
-        subject: 'Welcome to Elevensies 🟨',
-        html: welcomeHTML(record.display_name),
+        subject: 'Welcome to Elevensies',
+        html: welcomeHTML(record.display_name, record.id),
       }),
     });
 
