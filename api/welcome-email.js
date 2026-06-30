@@ -42,6 +42,7 @@ function welcomeHTML(displayName, userId) {
         </td></tr>
         <tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
           <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this because you just created an Elevensies account. Check your junk folder for future emails!</p>
+          <p style="font-family:'Jost',sans-serif;font-size:11px;line-height:16px;color:#6f8a78;margin:8px 0 0 0;"><a href="https://ksniuexnzikitbadttxx.supabase.co/storage/v1/object/public/Privacy%20Policy/elevensies_privacy_policy.pdf" style="color:#6f8a78;text-decoration:underline;">Privacy Policy</a></p>
         </td></tr>
       </table>
     </td></tr>
@@ -57,23 +58,31 @@ export default async function handler(req, res) {
   if (WEBHOOK_SECRET && secret !== WEBHOOK_SECRET) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const { record } = req.body;
-    if (!record?.id) return res.status(400).json({ error: 'No record in payload' });
+    const { record, old_record } = req.body;
+    if (!record?.id || !record?.email) return res.status(400).json({ error: 'No record in payload' });
 
-    const authRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${record.id}`, {
+    // Only send the welcome email the moment email_confirmed_at transitions
+    // from null to a value — i.e. right when they verify, not on signup.
+    const justConfirmed = !old_record?.email_confirmed_at && record?.email_confirmed_at;
+    if (!justConfirmed) {
+      return res.status(200).json({ message: 'Not a confirmation event — skipped' });
+    }
+
+    // Fetch their display name from profiles
+    const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${record.id}&select=display_name`, {
       headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` },
     });
-    const user = await authRes.json();
-    if (!user?.email) return res.status(200).json({ message: 'No email found' });
+    const profiles = await profileRes.json();
+    const displayName = profiles?.[0]?.display_name || null;
 
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: FROM_EMAIL,
-        to: user.email,
+        to: record.email,
         subject: 'Welcome to Elevensies',
-        html: welcomeHTML(record.display_name, record.id),
+        html: welcomeHTML(displayName, record.id),
       }),
     });
 
