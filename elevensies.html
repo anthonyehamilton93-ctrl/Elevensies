@@ -1417,7 +1417,7 @@
 
   <div class="history" id="anagramHistoryPanel">
     <div class="history-title">DAILY ANAGRAM</div>
-    <div id="anagramHistoryText" style="font-size:12px;opacity:0.6;letter-spacing:0.06em;padding:8px 0;text-align:center;">FIND THE HIDDEN 11TH LETTER AND UNSCRAMBLE THE FULL WORD.</div>
+    <div id="anagramHistoryText" style="font-size:12px;opacity:0.6;letter-spacing:0.06em;padding:8px 0;text-align:center;">ADD THE 11TH LETTER AND UNSCRAMBLE THE FULL WORD.</div>
   </div>
   <button class="practice-back-btn visible" id="anagramBackBtn">BACK</button>
 
@@ -2576,7 +2576,7 @@ function renderAnagram() {
   if (anagramSolvedToday) {
     statusLine.textContent = 'SOLVED! COME BACK TOMORROW';
   } else if (!anagramMysteryLetter) {
-    statusLine.textContent = 'TAP + TO FIND THE MISSING LETTER';
+    statusLine.textContent = 'TAP + TO ADD THE 11TH LETTER';
   } else {
     statusLine.textContent = `MISSING LETTER: ${anagramMysteryLetter}`;
   }
