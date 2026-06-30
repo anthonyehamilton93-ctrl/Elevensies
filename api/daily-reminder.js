@@ -74,6 +74,7 @@ function reminderHTML(name, streak, yesterdayScore, userId) {
             You're getting this because you played yesterday.
             <a href="${GAME_URL}/api/unsubscribe-reminders?uid=${userId}" style="color:#8ba895;text-decoration:underline;">Stop reminders</a>
           </p>
+          <p style="font-family:'Jost',sans-serif;font-size:11px;line-height:16px;color:#6f8a78;margin:8px 0 0 0;"><a href="https://ksniuexnzikitbadttxx.supabase.co/storage/v1/object/public/Privacy%20Policy/elevensies_privacy_policy.pdf" style="color:#6f8a78;text-decoration:underline;">Privacy Policy</a></p>
         </td></tr>
 
       </table>
