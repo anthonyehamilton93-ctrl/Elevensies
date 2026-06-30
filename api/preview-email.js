@@ -49,6 +49,7 @@ const footer = (uid) => `<tr><td style="padding:20px 40px;background-color:#114b
     You're receiving this as a registered Elevensies player.
     <a href="${GAME_URL}/api/unsubscribe?uid=${uid || 'preview'}" style="color:#8ba895;text-decoration:underline;">Unsubscribe</a>
   </p>
+  <p style="font-family:'Jost',sans-serif;font-size:11px;line-height:16px;color:#6f8a78;margin:8px 0 0 0;"><a href="https://ksniuexnzikitbadttxx.supabase.co/storage/v1/object/public/Privacy%20Policy/elevensies_privacy_policy.pdf" style="color:#6f8a78;text-decoration:underline;">Privacy Policy</a></p>
 </td></tr>`;
 
 const cta = (label) => `<tr><td align="center" style="padding:0 40px 44px 40px;">
@@ -93,6 +94,7 @@ export default async function handler(req, res) {
           You're getting this because you played yesterday.
           <a href="${GAME_URL}/api/unsubscribe-reminders?uid=preview" style="color:#8ba895;text-decoration:underline;">Stop reminders</a>
         </p>
+        <p style="font-family:'Jost',sans-serif;font-size:11px;line-height:16px;color:#6f8a78;margin:8px 0 0 0;"><a href="https://ksniuexnzikitbadttxx.supabase.co/storage/v1/object/public/Privacy%20Policy/elevensies_privacy_policy.pdf" style="color:#6f8a78;text-decoration:underline;">Privacy Policy</a></p>
       </td></tr>
     `));
   }
@@ -108,9 +110,15 @@ export default async function handler(req, res) {
           Your account is set up and your stats are ready to track. The game opens every day at 11am — 10 tiles, 11 turns, one shot at the leaderboard. Your score counts even if you don't finish, so make every word count.
         </p>
       </td></tr>
-      ${cta('Play Elevensies')}
+      <tr><td align="center" style="padding:0 40px 28px 40px;">
+        <a href="${GAME_URL}" style="display:inline-block;background-color:#f0c020;color:#155c33;font-family:'Jost',sans-serif;font-size:15px;font-weight:700;text-decoration:none;padding:14px 36px;border-radius:8px;letter-spacing:0.02em;text-transform:uppercase;">Play Elevensies</a>
+      </td></tr>
+      <tr><td align="center" style="padding:0 40px 44px 40px;">
+        <a href="${GAME_URL}/api/subscribe?uid=preview" style="display:inline-block;border:2px solid rgba(240,192,32,0.5);color:#f0c020;font-family:'Jost',sans-serif;font-size:13px;font-weight:700;text-decoration:none;padding:10px 24px;border-radius:8px;letter-spacing:0.08em;text-transform:uppercase;">🔔 Remind me at 11am</a>
+      </td></tr>
       <tr><td style="padding:20px 40px;background-color:#114b29;text-align:center;">
-        <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this because you just created an Elevensies account.</p>
+        <p style="font-family:'Jost',sans-serif;font-size:12px;line-height:18px;color:#8ba895;margin:0;">You're receiving this because you just created an Elevensies account. Check your junk folder for future emails!</p>
+        <p style="font-family:'Jost',sans-serif;font-size:11px;line-height:16px;color:#6f8a78;margin:8px 0 0 0;"><a href="https://ksniuexnzikitbadttxx.supabase.co/storage/v1/object/public/Privacy%20Policy/elevensies_privacy_policy.pdf" style="color:#6f8a78;text-decoration:underline;">Privacy Policy</a></p>
       </td></tr>
     `));
   }
